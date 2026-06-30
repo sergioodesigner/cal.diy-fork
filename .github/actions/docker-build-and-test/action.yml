@@ -1,5 +1,5 @@
 name: "Docker Build and Test"
-description: "Reusable action to build and test Docker images for Cal.com"
+description: "Reusable action to build and test Docker images for Cal.diy"
 
 inputs:
   platform:
@@ -61,7 +61,6 @@ runs:
       uses: docker/metadata-action@v5
       with:
         images: |
-          docker.io/calendso/calendso
           docker.io/calcom/cal.diy
           ghcr.io/calcom/cal.diy
         flavor: |

@@ -355,9 +355,20 @@ Executable doesn't exist at /Users/alice/Library/Caches/ms-playwright/chromium-1
 
 ### Docker
 
-The Docker image can be found on DockerHub at [https://hub.docker.com/r/calcom/cal.diy](https://hub.docker.com/r/calcom/cal.diy).
+> **Important:** Cal.diy is MIT-licensed. Do **not** deploy `calcom/cal.com` or `calendso/calendso` — those images are built from the AGPL-licensed [cal.com](https://github.com/calcom/cal.com) repository and are not equivalent to Cal.diy.
 
-**Note for ARM Users**: Use the {version}-arm suffix for pulling images. Example: `docker pull calcom/cal.diy:v5.6.19-arm`.
+Pre-built Cal.diy images are published to [GitHub Container Registry](https://github.com/calcom/cal.diy/pkgs/container/cal.diy) (`ghcr.io/calcom/cal.diy`) when a release tag (`v*`) is created. The Docker Hub repository [calcom/cal.diy](https://hub.docker.com/r/calcom/cal.diy) may exist but **has no published tags yet** — do not rely on it for deployment.
+
+**Recommended:** build the image from this repository (see [Building from source with Docker](#building-from-source-with-docker) below). That guarantees you run the MIT-licensed Cal.diy codebase.
+
+To use a published GHCR image (once available), set these in your `.env`:
+
+```env
+CALDIY_DOCKER_IMAGE=ghcr.io/calcom/cal.diy:latest
+CALDIY_PULL_POLICY=missing
+```
+
+**Note for ARM Users**: Use the `{version}-arm` suffix when pulling multi-arch release images. Example: `ghcr.io/calcom/cal.diy:v6.2.0-arm`.
 
 #### Requirements
 
@@ -437,30 +448,28 @@ Note: `docker compose` without the hyphen is now the primary method of using doc
 
    Update the appropriate values in your .env file, then proceed.
 
-4. (optional) Pre-Pull the images by running the following command:
+4. (optional) Pre-pull a published image — only if `CALDIY_PULL_POLICY=missing` is set in `.env`:
 
    ```bash
    docker compose pull
    ```
 
-5. Start Cal.diy via docker compose
-
-   To run the complete stack, which includes a local Postgres database, Cal.diy web app, and Prisma Studio:
+5. Build and start Cal.diy via docker compose (first run always builds from source):
 
    ```bash
-   docker compose up -d
+   docker compose up -d --build
    ```
 
    To run Cal.diy web app and Prisma Studio against a remote database, ensure that DATABASE_URL is configured for an available database and run:
 
    ```bash
-   docker compose up -d calcom studio
+   docker compose up -d --build calcom studio
    ```
 
    To run only the Cal.diy web app, ensure that DATABASE_URL is configured for an available database and run:
 
    ```bash
-   docker compose up -d calcom
+   docker compose up -d --build calcom
    ```
 
    **Note: to run in attached mode for debugging, remove `-d` from your desired run command.**
@@ -477,17 +486,11 @@ Note: `docker compose` without the hyphen is now the primary method of using doc
    docker compose down
    ```
 
-2. Pull the latest changes
+2. Pull the latest changes and rebuild
 
    ```bash
-   docker compose pull
-   ```
-
-3. Update env vars as necessary.
-4. Re-start the Cal.diy stack
-
-   ```bash
-   docker compose up -d
+   git pull
+   docker compose up -d --build
    ```
 
 #### Building from source with Docker
@@ -537,13 +540,13 @@ Note: `docker compose` without the hyphen is now the primary method of using doc
    To run Cal.diy web app and Prisma Studio against a remote database, ensure that DATABASE_URL is configured for an available database and run:
 
    ```bash
-   docker compose up -d calcom studio
+   docker compose up -d --build calcom studio
    ```
 
    To run only the Cal.diy web app, ensure that DATABASE_URL is configured for an available database and run:
 
    ```bash
-   docker compose up -d calcom
+   docker compose up -d --build calcom
    ```
 
    **Note: to run in attached mode for debugging, remove `-d` from your desired run command.**
@@ -635,11 +638,11 @@ Currently Vercel Pro Plan is required to be able to Deploy this application with
 
 ### Render
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/calcom/docker)
+Cal.diy does not have an official Render template. Use [Building from source with Docker](#building-from-source-with-docker) or deploy the web app to Render from this repository directly.
 
 ### Elestio
 
-[![Deploy on Elestio](https://elest.io/images/logos/deploy-to-elestio-btn.png)](https://elest.io/open-source/cal.com)
+Cal.diy does not have an official Elestio template. The [Elestio cal.com template](https://elest.io/open-source/cal.com) deploys the AGPL-licensed Cal.com image — use Docker build instructions in this README instead.
 
 <!-- LICENSE -->
 
