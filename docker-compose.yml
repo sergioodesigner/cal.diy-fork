@@ -35,13 +35,10 @@ services:
       - "${REDIS_PORT:-6379}:6379"
 
   calcom:
-    # MIT-licensed Cal.diy image — do NOT use calcom/cal.com (AGPL). Pre-built images are
-    # published to ghcr.io/calcom/cal.diy when a release tag (v*) is cut. Until then, build
-    # from source (default). To use a published image once available, set in .env:
-    #   CALDIY_DOCKER_IMAGE=ghcr.io/calcom/cal.diy:latest
-    #   CALDIY_PULL_POLICY=missing
-    image: ${CALDIY_DOCKER_IMAGE:-caldiy:local}
-    pull_policy: ${CALDIY_PULL_POLICY:-build}
+    # MIT-licensed Cal.diy — do NOT use calcom/cal.com (AGPL). Default image is published on GHCR.
+    # To build from source instead, set in .env: CALDIY_DOCKER_IMAGE=caldiy:local CALDIY_PULL_POLICY=build
+    image: ${CALDIY_DOCKER_IMAGE:-ghcr.io/sergioodesigner/cal.diy:latest}
+    pull_policy: ${CALDIY_PULL_POLICY:-missing}
     build:
       context: .
       dockerfile: Dockerfile
@@ -125,8 +122,8 @@ services:
 
   # Optional use of Prisma Studio. In production, comment out or remove the section below to prevent unwanted access to your database.
   studio:
-    image: ${CALDIY_DOCKER_IMAGE:-caldiy:local}
-    pull_policy: ${CALDIY_PULL_POLICY:-build}
+    image: ${CALDIY_DOCKER_IMAGE:-ghcr.io/sergioodesigner/cal.diy:latest}
+    pull_policy: ${CALDIY_PULL_POLICY:-missing}
     restart: always
     networks:
       - stack
